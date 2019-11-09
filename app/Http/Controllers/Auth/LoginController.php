@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request; // ★ 追加
+use Log;
 
 class LoginController extends Controller
 {
@@ -35,18 +36,20 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except(['login']);
     }
 
     // ★ メソッド追加
     protected function authenticated(Request $request, $user)
     {
+        Log::info($user);
         return $user;
     }
 
     protected function loggedOut(Request $request)
     {
         // セッションを再生成する
+        Log::info($request);
         $request->session()->regenerate();
 
         return response()->json();
