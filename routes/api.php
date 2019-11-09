@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +23,14 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('/users', 'UserController@index');
-Route::get('/send', 'UserController@send');
+// ログインユーザー
+Route::get('/user', function () {
+    return Auth::user();
+})->name('user');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::get('/users', 'UserController@index');
+// Route::get('/send', 'UserController@send');
+
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
