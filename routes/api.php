@@ -28,8 +28,12 @@ Route::get('/user', function () {
     return Auth::user();
 })->name('user');
 
-// Route::get('/users', 'UserController@index');
-// Route::get('/send', 'UserController@send');
+// 写真投稿
+Route::post('/photos', 'PhotoController@create')->name('photo.create');
+
+// めーるてすと用
+Route::get('/users', 'UserController@index');
+Route::get('/send', 'UserController@send');
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
