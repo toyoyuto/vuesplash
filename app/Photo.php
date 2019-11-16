@@ -3,9 +3,22 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Log;
+use Illuminate\Support\Arr;
 class Photo extends Model
 {
+
+    /**
+     * モデルと関連しているテーブル
+     *
+     * @var string
+     */
+    protected $table = 'photos';
+
+    // protected $fillable = [
+    //     'user_id'
+    // ];
+
     /** プライマリキーの型 */
     protected $keyType = 'string';
 
@@ -15,8 +28,7 @@ class Photo extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-
-        if (! array_get($this->attributes, 'id')) {
+        if (! Arr::get($this->attributes, 'id')) {
             $this->setId();
         }
     }
@@ -39,7 +51,6 @@ class Photo extends Model
             range(0, 9), range('a', 'z'),
             range('A', 'Z'), ['-', '_']
         );
-
         $length = count($characters);
 
         $id = "";
@@ -47,7 +58,6 @@ class Photo extends Model
         for ($i = 0; $i < self::ID_LENGTH; $i++) {
             $id .= $characters[random_int(0, $length - 1)];
         }
-
         return $id;
     }
 }

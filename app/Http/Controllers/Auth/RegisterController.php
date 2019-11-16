@@ -65,7 +65,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        Log::info($data);
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -76,7 +75,6 @@ class RegisterController extends Controller
     // ★ メソッド追加
     protected function registered(Request $request, $user)
     {
-        Log::info($request);
         return $user;
     }
 }

@@ -42,14 +42,12 @@ class LoginController extends Controller
     // ★ メソッド追加
     protected function authenticated(Request $request, $user)
     {
-        Log::info($user);
         return $user;
     }
 
     protected function loggedOut(Request $request)
     {
         // セッションを再生成する
-        Log::info($request);
         $request->session()->regenerate();
 
         return response()->json();

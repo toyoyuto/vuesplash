@@ -17,11 +17,8 @@ class UserApiTest extends TestCase
     public function setUp():void
     {
         parent::setUp();
-        Log::info($this->user);
         // テストユーザー作成
         $this->user = factory(User::class)->create();
-
-        Log::info($this->user);
     }
 
     /**
