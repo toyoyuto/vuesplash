@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
+
 class Photo extends Model
 {
 
@@ -15,9 +17,16 @@ class Photo extends Model
      */
     protected $table = 'photos';
 
-    // protected $fillable = [
-    //     'user_id'
-    // ];
+    /** JSONに含める属性 */
+    protected $appends = [
+        'url',
+    ];
+
+    /** JSONに含める属性 */
+    protected $visible = [
+        'id', 'owner', 'url',
+    ];
+
 
     /** プライマリキーの型 */
     protected $keyType = 'string';
@@ -59,5 +68,23 @@ class Photo extends Model
             $id .= $characters[random_int(0, $length - 1)];
         }
         return $id;
+    }
+
+    /**
+     * リレーションシップ - usersテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function owner()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id', 'users');
+    }
+
+    /**
+     * アクセサ - url
+     * @return string
+     */
+    public function getUrlAttribute()
+    {
+        return Storage::disk('s3')->url($this->attributes['filename']);
     }
 }
