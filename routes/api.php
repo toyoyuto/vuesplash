@@ -34,6 +34,9 @@ Route::post('/photos', 'PhotoController@create')->name('photo.create');
 // 写真一覧
 Route::get('/photos', 'PhotoController@index')->name('photo.index');
 
+// 写真詳細
+Route::get('/photos/{id}', 'PhotoController@show')->name('photo.show');
+
 // めーるてすと用
 Route::get('/users', 'UserController@index');
 Route::get('/send', 'UserController@send');

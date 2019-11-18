@@ -1,18 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-// ページコンポーネントをインポートする
 import PhotoList from './pages/PhotoList.vue'
+import PhotoDetail from './pages/PhotoDetail.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
-import PhotoDetail from './pages/PhotoDetail.vue'
-import store from './store' // ★　追加
 
-// VueRouterプラグインを使用する
-// これによって<RouterView />コンポーネントなどを使うことができる
+import store from './store'
+
 Vue.use(VueRouter)
 
-// パスとコンポーネントのマッピング
 const routes = [
   {
     path: '/',
@@ -44,7 +41,6 @@ const routes = [
   }
 ]
 
-// VueRouterインスタンスを作成する
 const router = new VueRouter({
   mode: 'history',
   scrollBehavior () {
@@ -53,6 +49,4 @@ const router = new VueRouter({
   routes
 })
 
-// VueRouterインスタンスをエクスポートする
-// app.jsでインポートするため
 export default router
