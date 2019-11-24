@@ -2442,10 +2442,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2488,8 +2522,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       photo: null,
-      fullWidth: false
+      fullWidth: false,
+      commentContent: '',
+      commentErrors: null
     };
+  },
+  computed: {
+    isLogin: function isLogin() {
+      return this.$store.getters['auth/check'];
+    }
   },
   methods: {
     fetchPhoto: function () {
@@ -2501,27 +2542,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log('response');
-                _context.next = 3;
+                _context.next = 2;
                 return axios.get("/api/photos/".concat(this.id));
 
-              case 3:
+              case 2:
                 response = _context.sent;
-                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 8;
+                  _context.next = 6;
                   break;
                 }
 
                 this.$store.commit('error/setCode', response.status);
                 return _context.abrupt("return", false);
 
-              case 8:
-                console.log(response.data);
+              case 6:
                 this.photo = response.data;
 
-              case 10:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -2535,31 +2573,80 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return fetchPhoto;
     }(),
-    hideForm: function hideForm() {
-      console.log('ssss');
-      this.fullWidth = !this.fullWidth;
-    }
+    addComment: function () {
+      var _addComment = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post("/api/photos/".concat(this.id, "/comments"), {
+                  content: this.commentContent
+                });
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                this.commentErrors = response.data.errors;
+                return _context2.abrupt("return", false);
+
+              case 6:
+                this.commentContent = '';
+                this.commentErrors = null;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context2.abrupt("return", false);
+
+              case 11:
+                this.$set(this.photo, 'comments', [response.data].concat(_toConsumableArray(this.photo.comments)));
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function addComment() {
+        return _addComment.apply(this, arguments);
+      }
+
+      return addComment;
+    }()
   },
   watch: {
     $route: {
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context3.prev = _context3.next) {
                 case 0:
-                  console.log('3');
-                  _context2.next = 3;
+                  _context3.next = 2;
                   return this.fetchPhoto();
 
-                case 3:
+                case 2:
                 case "end":
-                  return _context2.stop();
+                  return _context3.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee3, this);
         }));
 
         function handler() {
@@ -4813,7 +4900,11 @@ var render = function() {
             "figure",
             {
               staticClass: "photo-detail__pane photo-detail__image",
-              on: { click: _vm.hideForm }
+              on: {
+                click: function($event) {
+                  _vm.fullWidth = !_vm.fullWidth
+                }
+              }
             },
             [
               _c("img", { attrs: { src: _vm.photo.url, alt: "" } }),
@@ -4842,7 +4933,98 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm._m(1)
+            _vm._m(1),
+            _vm._v(" "),
+            _vm.photo.comments.length > 0
+              ? _c(
+                  "ul",
+                  { staticClass: "photo-detail__comments" },
+                  _vm._l(_vm.photo.comments, function(comment) {
+                    return _c(
+                      "li",
+                      {
+                        key: comment.content,
+                        staticClass: "photo-detail__commentItem"
+                      },
+                      [
+                        _c("p", { staticClass: "photo-detail__commentBody" }, [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(comment.content) +
+                              "\n        "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "photo-detail__commentInfo" }, [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(comment.author.name) +
+                              "\n        "
+                          )
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              : _c("p", [_vm._v("No comments yet.")]),
+            _vm._v(" "),
+            _vm.isLogin
+              ? _c(
+                  "form",
+                  {
+                    staticClass: "form",
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.addComment($event)
+                      }
+                    }
+                  },
+                  [
+                    _vm.commentErrors
+                      ? _c("div", { staticClass: "errors" }, [
+                          _vm.commentErrors.content
+                            ? _c(
+                                "ul",
+                                _vm._l(_vm.commentErrors.content, function(
+                                  msg
+                                ) {
+                                  return _c("li", { key: msg }, [
+                                    _vm._v(_vm._s(msg))
+                                  ])
+                                }),
+                                0
+                              )
+                            : _vm._e()
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.commentContent,
+                          expression: "commentContent"
+                        }
+                      ],
+                      staticClass: "form__item",
+                      domProps: { value: _vm.commentContent },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.commentContent = $event.target.value
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ]
+                )
+              : _vm._e()
           ])
         ]
       )
@@ -4866,6 +5048,18 @@ var staticRenderFns = [
     return _c("h2", { staticClass: "photo-detail__title" }, [
       _c("i", { staticClass: "icon ion-md-chatboxes" }),
       _vm._v("Comments\n    ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form__button" }, [
+      _c(
+        "button",
+        { staticClass: "button button--inverse", attrs: { type: "submit" } },
+        [_vm._v("submit comment")]
+      )
     ])
   }
 ]
