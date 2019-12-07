@@ -35,6 +35,9 @@ class PhotoListApiTest extends TestCase
                 'owner' => [
                     'name' => $photo->owner->name,
                 ],
+                "likes_count" => 0,
+                "liked_by_user" => false,
+                
             ];
         })
         ->all();
